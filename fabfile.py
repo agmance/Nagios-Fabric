@@ -7,6 +7,7 @@ import time
 
 dwndir = '/home/%s/installs' % env.user
 
+
 def DownloadNagios():
 	"""
 	Used to Download Nagios
@@ -174,8 +175,12 @@ def Nagiosnrpe():
 	run(NRPE_DWNL_CMD)
 	NRPE_EXT_CMD = "cd %s && tar -zxvf nrpe-2.13.tar.gz" % (dwndir)
 	run(NRPE_EXT_CMD)
-	NRPE_SSL_CMD = "ln -s /usr/lib/x86_64-linux-gnu/libssl.so /usr/lib/libssl.so"
-	sudo(NRPE_SSL_CMD)
+	CHCK_LIB_CMD = "ls /usr/lib/libssl.so"
+	if run(CHCK_LIB_CMD) == "/usr/lib/libssl.so":
+		run("echo Exist!")
+	else:
+		NRPE_SSL_CMD = "ln -s /usr/lib/x86_64-linux-gnu/libssl.so /usr/lib/libssl.so"
+		sudo(NRPE_SSL_CMD)
 
 def NrpeSetup():
 	"""
