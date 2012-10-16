@@ -40,4 +40,18 @@ This is my personal version:
 
 - Remove ec2 functions
 
-- fix bug in nrpe decompress tar.gz
+- fix bug in nrpe decompress tar.gz (Line 204/205) adding run(NRPE_EXT_CMD)
+
+
+
+ - - - - - - - - - - - - - 
+
+Ubuntu 12.04 (maybe 11.10) x64.
+
+nrpe -> compile fails to find SSL libraries. Solution:
+
+Add in line 6630 in configure file this path: /usr/lib/x86_64-linux-gnu/
+
+or
+
+ln -s /usr/lib/x86_64-linux-gnu/libssl.so
