@@ -45,10 +45,18 @@ def Createuser():
 	"""
 	Used to Create Nagios User, Group & Adding Nagios User & Apache USer to Nagios Group
 	"""
-	sudo("useradd -m nagios")
-	sudo("groupadd nagcmd")
-	sudo("usermod -a -G nagcmd nagios")
-	sudo("usermod -a -G nagcmd apache")
+	CHCK_USR_CMD = "cat /etc/shadow | grep nagios | awk -F: '{ print $1 }'"
+	if sudo(CHCK_USR_CMD) == "nagios":
+		run("echo 'user nagios already exists'")
+	else:
+		sudo("useradd -m nagios")
+	CHCK_GRP_CMD = "cat /etc/group | grep nagcmd | awk -F: '{ print $1 }'"
+	if sudo(CHCK_GRP_CMD) == "nagcmd":
+		run("echo 'group nagcmd already exist'")
+	else: 
+		sudo("groupadd nagcmd")
+		sudo("usermod -a -G nagcmd nagios")
+		sudo("usermod -a -G nagcmd apache")
 
 def RunConfigScript():
 	"""
