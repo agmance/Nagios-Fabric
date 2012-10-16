@@ -3,36 +3,12 @@ import os
 from fabric.api import run,local,env 
 from fabric.contrib import files
 from fabric.operations import sudo
-import boto
-from boto.ec2.connection import EC2Connection
-from boto.ec2 import *
+#import boto
+#from boto.ec2.connection import EC2Connection
+#from boto.ec2 import *
 import time
 
 dwndir = '/home/%s/installs' % env.user
-env.user = 'ec2-user'
-#env.hosts = 'pub_dns'
-AWS_ACCESS_KEY_ID = ''
-AWS_SECRET_ACCESS_KEY = ''
-key_pair = ''
-
-ec2_conn = EC2Connection('AWS_ACCESS_KEY_ID','AWS_SECRET_ACCESS_KEY')
-
-def CreateInstance():
-	"""
-	Used to Create New Instance 
-	"""
-	reservation = ec2_conn.run_instances('ami-31814f58', min_count='1', 
-						    max_count='1', key_name='My-Key-Pair',
-						    instance_type='t1.micro')
-	instance = reservation.instances[0]
-	print "Waiting for Instance to start ...."
-	status = instance.update()
-	while status != "running":
- 		status = instance.update()
-		print status
-		time.sleep(25)
-		env.hosts = instance.public_dns_name
-		print env.hosts
 
 def DownloadNagios():
 	"""
@@ -40,27 +16,16 @@ def DownloadNagios():
 	"""
 	MKDIR_CMD = "mkdir /home/%s/installs" % env.user
 	run(MKDIR_CMD)
-	DWNNAGIOS_CMD = "wget -P %s http://sourceforge.net/projects/nagios/files/nagios-3.x/nagios-3.3.1/nagios-3.3.1.tar.gz/download" % (dwndir)
+	DWNNAGIOS_CMD = "wget -P %s http://freefr.dl.sourceforge.net/project/nagios/nagios-3.x/nagios-3.4.1/nagios-3.4.1.tar.gz" % (dwndir)
 	run(DWNNAGIOS_CMD)
 
 def UbuntuDependencyInstall():
-	sudo("apt-get install build-essential")
-	sudo("apt-get install php")
-	sudo("apt-get install gd gd-devel")
-	sudo("apt-get install apache2")
-	sudo("apt-get install xinetd")
-	sudo("apt-get install openssl libssl-dev libcurl3-openssl-dev")
-
-def NonUbuntuDependencyInstall():
-	sudo("yum groupinstall -y 'Development Tools'")
-	sudo("yum install -y php")
-	sudo("yum install -y gd")
-	sudo("yum install -y gd-devel")
-	sudo("yum install -y httpd")
-	sudo("yum install -y gcc glibc glibc-common")
-	sudo("yum install -y gcc glibc glibc-common")
-	sudo("yum install -y xinetd")
-	sudo("yum install -y openssl openssl-devel")
+        sudo("apt-get install -y --force-yes apache2")
+        sudo("apt-get install -y --force-yes libapache2-mod-php5")
+        sudo("apt-get install -y --force-yes build-essential")
+        sudo("apt-get install -y --force-yes libgd2-xpm-dev")
+        sudo("apt-get install -y --force-yes xinetd")
+        sudo("apt-get install -y --force-yes openssl libssl-dev")
 
 def DependencyInstall():
 	"""
@@ -76,7 +41,7 @@ def ExtractNagios():
 	"""
 	Used TO Extract Nagios Downloaded Package
 	"""
-	TAR_CMD = "cd %s && tar -zxvf nagios-3.3.1.tar.gz" % (dwndir)
+	TAR_CMD = "cd %s && tar -zxvf nagios-3.4.1.tar.gz" % (dwndir)
 	run(TAR_CMD)
 
 def Createuser():
@@ -123,31 +88,31 @@ def ApacheRestart():
 	"""
 	Used to Restart Apache Server
 	"""
-	sudo("/etc/init.d/httpd restart")
+	sudo("/etc/init.d/apache2 restart")
 
 def NagiosPluginDownload():
 	"""
 	Used to Download Nagios Plugin
 	"""
-	DWNPLUGIN_CMD = "wget -P %s http://sourceforge.net/projects/nagiosplug/files/nagiosplug/1.4.15/nagios-plugins-1.4.15.tar.gz/download" % (dwndir)
+	DWNPLUGIN_CMD = "wget -P %s http://heanet.dl.sourceforge.net/project/nagiosplug/nagiosplug/1.4.16/nagios-plugins-1.4.16.tar.gz" % (dwndir)
 	run(DWNPLUGIN_CMD)
-	TAR_PLG_CMD = "cd %s && tar -zxvf nagios-plugins-1.4.15.tar.gz" % (dwndir)
+	TAR_PLG_CMD = "cd %s && tar -zxvf nagios-plugins-1.4.16.tar.gz" % (dwndir)
 	run(TAR_PLG_CMD)
 
 def PluginConfig():
 	"""
 	Used to Run Plugin Configure Script
 	"""
-	PLG_CONF_CMD = "cd %s/nagios-plugins-1.4.15 && ./configure --with-nagios-user=nagios --with-nagios-group=nagios" % (dwndir)
+	PLG_CONF_CMD = "cd %s/nagios-plugins-1.4.16 && ./configure --with-nagios-user=nagios --with-nagios-group=nagios" % (dwndir)
 	run(PLG_CONF_CMD)
 	
 def InstallPlugin():
 	"""
 	Used to Install Nagios Plugin
 	"""
-	PLG_COMP_CMD = "cd %s/nagios-plugins-1.4.15 && make" % (dwndir)
+	PLG_COMP_CMD = "cd %s/nagios-plugins-1.4.16 && make" % (dwndir)
 	sudo(PLG_COMP_CMD)
-	PLG_INST_CMD = "cd %s/nagios-plugins-1.4.15 && make install" % (dwndir)
+	PLG_INST_CMD = "cd %s/nagios-plugins-1.4.16 && make install" % (dwndir)
 	sudo(PLG_INST_CMD)
 
 def NagiosServiceAdd():
@@ -183,6 +148,7 @@ def NagiosFullInstall():
 	CompileSource()
 	InstallSource()
 	ApacheRestart()
+	NagiosInit()
 
 def NagiosPluginFullInstall():
 	"""
@@ -202,7 +168,7 @@ def Nagiosnrpe():
 	NRPE_DWNL_CMD = "wget -P %s http://nchc.dl.sourceforge.net/project/nagios/nrpe-2.x/nrpe-2.13/nrpe-2.13.tar.gz" % (dwndir)
 	run(NRPE_DWNL_CMD)
 	NRPE_EXT_CMD = "cd %s && tar -zxvf nrpe-2.13.tar.gz" % (dwndir)
-
+	run(NRPE_EXT_CMD)
 def NrpeSetup():
 	"""
 	Used to Configure & Install NRPE Client NOTE: Before Running this command make sure openssl & openssl-devel packages are installed
