@@ -49,6 +49,7 @@ This is my personal version:
 
 - fix bug in nrpe decompress tar.gz (Line 204/205) adding run(NRPE_EXT_CMD)
 
+- add symlink for ssl library
 
 
 - - - - - - - - - - - - - 
@@ -61,4 +62,4 @@ Add in line 6630 in configure file this path: /usr/lib/x86_64-linux-gnu/
 
 or
 
-ln -s /usr/lib/x86_64-linux-gnu/libssl.so /usr/lib/libssl.so <- Solved! 
+ln -s /usr/lib/x86_64-linux-gnu/libssl.so /usr/lib/libssl.so <- Added in fabfile.py
