@@ -54,4 +54,4 @@ Add in line 6630 in configure file this path: /usr/lib/x86_64-linux-gnu/
 
 or
 
-ln -s /usr/lib/x86_64-linux-gnu/libssl.so
+ln -s /usr/lib/x86_64-linux-gnu/libssl.so /usr/lib/libssl.so
