@@ -166,21 +166,24 @@ def Nagiosnrpe():
 	run(NRPE_DWNL_CMD)
 	NRPE_EXT_CMD = "cd %s && tar -zxvf nrpe-2.13.tar.gz" % (dwndir)
 	run(NRPE_EXT_CMD)
+	NRPE_SSL_CMD = "ln -s /usr/lib/x86_64-linux-gnu/libssl.so /usr/lib/libssl.so"
+	sudo(NRPE_SSL_CMD)
+
 def NrpeSetup():
 	"""
 	Used to Configure & Install NRPE Client NOTE: Before Running this command make sure openssl & openssl-devel packages are installed
 	"""
 	NRPE_CONF_CMD = "cd %s/nrpe-2.13 && ./configure" % (dwndir)
 	run(NRPE_CONF_CMD)
-	NRPE_MAKE_CMD = "cd %s && make all" % (dwndir)
+	NRPE_MAKE_CMD = "cd %s/nrpe-2.13 && make all" % (dwndir)
 	sudo(NRPE_MAKE_CMD)
-	NRPE_PLG_CMD = "cd %s && make install-plugin" % (dwndir)
+	NRPE_PLG_CMD = "cd %s/nrpe-2.13 && make install-plugin" % (dwndir)
 	sudo(NRPE_PLG_CMD)
-	NRPE_DMN_CMD = "cd %s && make install-daemon" % (dwndir)
+	NRPE_DMN_CMD = "cd %s/nrpe-2.13 && make install-daemon" % (dwndir)
 	sudo(NRPE_DMN_CMD)
-	NRPE_DMNCONF_CMD = "cd %s && make install-daemon-config" % (dwndir)
+	NRPE_DMNCONF_CMD = "cd %s/nrpe-2.13 && make install-daemon-config" % (dwndir)
 	sudo(NRPE_DMNCONF_CMD)
-	NRPE_XINETD_CMD = "cd %s && make install-xinetd" % (dwndir)
+	NRPE_XINETD_CMD = "cd %s/nrpe-2.13 && make install-xinetd" % (dwndir)
 	sudo(NRPE_XINETD_CMD)
 	NRPE_SRVC_CMD = "echo 'nrpe               5666/tcp                                  # NRPE' >> /etc/services"
 	sudo(NRPE_SRVC_CMD)
