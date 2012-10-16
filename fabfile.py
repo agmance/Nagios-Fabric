@@ -3,9 +3,6 @@ import os
 from fabric.api import run,local,env 
 from fabric.contrib import files
 from fabric.operations import sudo
-#import boto
-#from boto.ec2.connection import EC2Connection
-#from boto.ec2 import *
 import time
 
 dwndir = '/home/%s/installs' % env.user
