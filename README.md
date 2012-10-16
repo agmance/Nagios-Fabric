@@ -3,7 +3,7 @@ WARNING
 - - - - - -
 
 Working for fix bugs in NRPE step
-
+- - - - - -
 
 Nagios-Fabric
 =============
@@ -41,7 +41,7 @@ fab NrpeFullInstall
 
 After Installation point your browser to http://IP-ADDRESS/nagios
 
-  - - - - - - - - - - - - 
+- - - - - - - - - - - - 
 
 This is my personal version:
 
@@ -51,7 +51,7 @@ This is my personal version:
 
 
 
- - - - - - - - - - - - - - 
+- - - - - - - - - - - - - 
 
 Ubuntu 12.04 (maybe 11.10) x64.
 
