@@ -1,10 +1,4 @@
 - - - - - - 
-WARNING
-- - - - - -
-
-Working for fix bugs in NRPE step
-- - - - - -
-
 Nagios-Fabric
 =============
 
