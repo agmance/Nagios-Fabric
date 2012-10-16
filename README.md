@@ -36,4 +36,8 @@ After Installation point your browser to http://IP-ADDRESS/nagios
 
   - - - - - - - - - - - - 
 
-This is my personal version, because i don't use AWS.
+This is my personal version:
+
+- Remove ec2 functions
+
+- fix bug in nrpe decompress tar.gz
