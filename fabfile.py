@@ -16,6 +16,8 @@ def DownloadNagios():
 	run(MKDIR_CMD)
 	DWNNAGIOS_CMD = "wget -P %s http://freefr.dl.sourceforge.net/project/nagios/nagios-3.x/nagios-3.4.1/nagios-3.4.1.tar.gz" % (dwndir)
 	run(DWNNAGIOS_CMD)
+def DependencesSSL():
+	sudo("apt-get install -y --force-yes openssl libssl-dev")
 
 def UbuntuDependencyInstall():
         sudo("apt-get install -y --force-yes apache2")
@@ -23,7 +25,7 @@ def UbuntuDependencyInstall():
         sudo("apt-get install -y --force-yes build-essential")
         sudo("apt-get install -y --force-yes libgd2-xpm-dev")
         sudo("apt-get install -y --force-yes xinetd")
-        sudo("apt-get install -y --force-yes openssl libssl-dev")
+	DependencesSSL()
 
 def DependencyInstall():
 	"""
@@ -175,12 +177,13 @@ def Nagiosnrpe():
 	run(NRPE_DWNL_CMD)
 	NRPE_EXT_CMD = "cd %s && tar -zxvf nrpe-2.13.tar.gz" % (dwndir)
 	run(NRPE_EXT_CMD)
-	CHCK_LIB_CMD = "ls /usr/lib/libssl.so"
-	if run(CHCK_LIB_CMD) == "/usr/lib/libssl.so":
+	CHCK_LIB_CMD = "ls /usr/lib/x86_64-linux-gnu/libssl.so"
+	if run(CHCK_LIB_CMD) == "/usr/lib/x86_64-linux-gnu/libssl.so":
 		run("echo Exist!")
-	else:
 		NRPE_SSL_CMD = "ln -s /usr/lib/x86_64-linux-gnu/libssl.so /usr/lib/libssl.so"
 		sudo(NRPE_SSL_CMD)
+	else:
+		DependencesSSL()
 
 def NrpeSetup():
 	"""
