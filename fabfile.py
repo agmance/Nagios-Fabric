@@ -169,6 +169,13 @@ def NagiosPluginFullInstall():
 	NagiosVerify()
 	NagiosRestart()
 
+def SymLinkSSL():
+	"""
+	Create a symbolic link for ssl libraries
+	"""
+	NRPE_SSL_CMD = "ln -s /usr/lib/x86_64-linux-gnu/libssl.so /usr/lib/libssl.so"
+	sudo(NRPE_SSL_CMD)
+
 def Nagiosnrpe():
 	"""
 	Used to Download Nagios NRPE Client
@@ -180,8 +187,7 @@ def Nagiosnrpe():
 	CHCK_LIB_CMD = "ls /usr/lib/x86_64-linux-gnu/libssl.so"
 	if run(CHCK_LIB_CMD) == "/usr/lib/x86_64-linux-gnu/libssl.so":
 		run("echo Exist!")
-		NRPE_SSL_CMD = "ln -s /usr/lib/x86_64-linux-gnu/libssl.so /usr/lib/libssl.so"
-		sudo(NRPE_SSL_CMD)
+		SymLinkSSL()
 	else:
 		DependencesSSL()
 
