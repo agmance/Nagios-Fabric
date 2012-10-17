@@ -1,4 +1,17 @@
-- - - - - - 
+- - - - - - - - - - - - 
+
+This is my personal version:
+
+- Remove ec2 functions
+
+- fix bug in nrpe decompress tar.gz (Line 204/205) adding run(NRPE_EXT_CMD)
+
+- add symlink for ssl library
+
+
+- - - - - - - - - - - - - 
+
+============
 Nagios-Fabric
 =============
 
@@ -35,19 +48,7 @@ fab NrpeFullInstall
 
 After Installation point your browser to http://IP-ADDRESS/nagios
 
-- - - - - - - - - - - - 
-
-This is my personal version:
-
-- Remove ec2 functions
-
-- fix bug in nrpe decompress tar.gz (Line 204/205) adding run(NRPE_EXT_CMD)
-
-- add symlink for ssl library
-
-
-- - - - - - - - - - - - - 
-
+- - - - - 
 Ubuntu 12.04 (maybe 11.10) x64.
 
 nrpe -> compile fails to find SSL libraries. Solution:
