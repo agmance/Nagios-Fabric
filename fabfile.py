@@ -190,6 +190,7 @@ def Nagiosnrpe():
 		SymLinkSSL()
 	else:
 		DependencesSSL()
+		SymLinkSSL()
 
 def NrpeSetup():
 	"""
