@@ -11,6 +11,12 @@ This is my personal version:
 
 - - - - - - - - - - - - - 
 
+TODO
+
+Separate dependences for differents packages (nagios, nrpe..)
+
+- - - - - 
+
 ============
 Nagios-Fabric
 =============
